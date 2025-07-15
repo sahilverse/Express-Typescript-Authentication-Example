@@ -60,9 +60,10 @@ npm run dev
 ## API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login user
-- `POST /api/auth/logout` - Logout user
+- `POST /api/user/register` - Register a new user
+- `POST /api/user/login` - Login user
+- `POST /api/user/logout` - Logout user
+- `POST /api/user/token/refresh` - Refresh token
 
 
 ## Project Structure
