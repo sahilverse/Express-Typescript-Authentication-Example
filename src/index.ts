@@ -13,9 +13,6 @@ prisma.$connect()
     .then(() => {
         console.log('Connected to the database successfully');
 
-        // Initialize Socket.IO after successful database connection
-        initSocketIO(server);
-
         // Start the server
         server.listen(PORT, () => {
             console.log(`Server is running at http://localhost:${PORT}`);
