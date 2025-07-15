@@ -63,7 +63,7 @@ npm run dev
 - `POST /api/auth/register` - Register a new user
 - `POST /api/auth/login` - Login user
 - `POST /api/auth/logout` - Logout user
-- `GET /api/auth/me` - Get current user info
+
 
 ## Project Structure
 
