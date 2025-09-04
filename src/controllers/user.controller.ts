@@ -60,11 +60,13 @@ export const refreshToken = async (req: Request, res: Response): Promise<any> =>
 
 // Register a new user
 export const registerUser = async (req: Request, res: Response): Promise<any> => {
-    const { name, email, password } = registerSchema.parse(req.body);
+    const result = registerSchema.safeParse(req.body);
 
-    if (!name || !email || !password) {
-        return ResponseHandler.sendError(res, StatusCodes.BAD_REQUEST, "Name, email and password are required");
+    if (!result.success) {
+        return ResponseHandler.sendValidationError(res, result);
     }
+
+    const { name, email, password } = result.data;
 
     try {
         const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -91,11 +93,13 @@ export const registerUser = async (req: Request, res: Response): Promise<any> =>
 
 // Login a user
 export const loginUser = async (req: Request, res: Response): Promise<any> => {
-    const { email, password } = loginSchema.parse(req.body);
+    const result = registerSchema.safeParse(req.body);
 
-    if (!email || !password) {
-        return ResponseHandler.sendError(res, StatusCodes.BAD_REQUEST, "Email and password are required");
+    if (!result.success) {
+        return ResponseHandler.sendValidationError(res, result);
     }
+    
+    const { email, password } = result.data;
 
     try {
         const user = await prisma.user.findUnique({ where: { email } });
