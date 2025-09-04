@@ -152,7 +152,6 @@ export const logoutUser = async (req: Request, res: Response): Promise<any> => {
         await JwtUtils.revokeRefreshToken(token);
     }
 
-    res.clearCookie("access_token");
     res.clearCookie("refresh_token");
 
     return ResponseHandler.sendResponse(res, StatusCodes.OK, "Logout successful");
