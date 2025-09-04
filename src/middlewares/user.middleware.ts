@@ -7,7 +7,7 @@ import { JwtTokenPayload } from "../types/types";
 
 
 export const userMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    const token = req.headers.authorization?.split(" ")[1] || req.cookies?.access_token;
+    const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
         return ResponseHandler.sendError(res, 401, "Authorization token not provided");
