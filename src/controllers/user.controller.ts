@@ -11,7 +11,7 @@ import { loginSchema, registerSchema } from "../utils/zod";
 
 // Function to refresh - access and refresh tokens
 export const refreshToken = async (req: Request, res: Response): Promise<any> => {
-    const token = req.body?.refresh_token || req.cookies?.refresh_token;
+    const token =  req.cookies?.refresh_token;
 
     if (!token) {
         return ResponseHandler.sendError(res, StatusCodes.UNAUTHORIZED, "Refresh token not provided");
@@ -42,29 +42,18 @@ export const refreshToken = async (req: Request, res: Response): Promise<any> =>
     const accessMaxAge = JWT_ACCESS_EXPIRATION_MINUTES * 60 * 1000;
     const refreshMaxAge = JWT_REFRESH_EXPIRATION_DAYS * 24 * 60 * 60 * 1000;
 
-    res.cookie("access_token", newAccessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: accessMaxAge,
-    });
-
     res.cookie("refresh_token", newRefreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: refreshMaxAge,
     });
-
-    if (req.cookies?.refresh_token) {
-        return ResponseHandler.sendResponse(res, StatusCodes.OK, "Tokens refreshed successfully", userData);
-    }
-
+        
     return ResponseHandler.sendResponse(res, StatusCodes.OK, "Tokens refreshed successfully", {
-        access_token: newAccessToken,
-        refresh_token: newRefreshToken,
         user: userData,
+        access_token: newAccessToken
     });
+    
 };
 
 
@@ -125,12 +114,6 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
         const accessMaxAge = JWT_ACCESS_EXPIRATION_MINUTES * 60 * 1000;
         const refreshMaxAge = JWT_REFRESH_EXPIRATION_DAYS * 24 * 60 * 60 * 1000;
 
-        res.cookie("access_token", accessToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            maxAge: accessMaxAge,
-        });
 
         res.cookie("refresh_token", refreshToken, {
             httpOnly: true,
@@ -141,7 +124,6 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
 
         return ResponseHandler.sendResponse(res, StatusCodes.OK, "Login successful", {
             access_token: accessToken,
-            refresh_token: refreshToken,
             user: {
                 id: user.id,
                 name: user.name,
