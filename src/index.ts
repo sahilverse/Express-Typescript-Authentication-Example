@@ -1,4 +1,4 @@
-import './loadEnv';
+import 'dotenv/config';
 import app from './app';
 import prisma from './config/prisma';
 import { PORT } from './constants';
